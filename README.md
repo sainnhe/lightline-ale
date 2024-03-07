@@ -34,6 +34,7 @@ let g:lightline.component_expand = {
       \  'linter_warnings': 'lightline#ale#warnings',
       \  'linter_errors': 'lightline#ale#errors',
       \  'linter_ok': 'lightline#ale#ok',
+      \  'linter_unavailable': 'lightline#ale#unavailable',
       \ }
 ```
 
@@ -41,25 +42,22 @@ let g:lightline.component_expand = {
 
 ```viml
 let g:lightline.component_type = {
-      \     'linter_checking': 'right',
-      \     'linter_infos': 'right',
       \     'linter_warnings': 'warning',
       \     'linter_errors': 'error',
-      \     'linter_ok': 'right',
       \ }
 ```
 
 3. Add the components to the lightline, for example to the right side:
 
 ```viml
-let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ]] }
+let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok', 'linter_unavailable' ]] }
 ```
 
 3.1. Lineinfo, fileformat, etc. have to be added additionaly. Final example:
 
 ```viml
 let g:lightline.active = {
-            \ 'right': [ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+            \ 'right': [ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok', 'linter_unavailable' ],
             \            [ 'lineinfo' ],
 	    \            [ 'percent' ],
 	    \            [ 'fileformat', 'fileencoding', 'filetype'] ] }
@@ -88,6 +86,10 @@ The indicator to use when there are errors. Default is `E:`.
 
 The indicator to use when there are no warnings or errors. Default is `OK`.
 
+##### `g:lightline#ale#indicator_unavailable`
+
+The indicator to use when there are no warnings or errors. Default is an empty string.
+
 ### Using icons as indicators
 
 If you would like to replace the default indicators with symbols like on the screenshot, then you'll need to ensure you have some "iconic fonts" installed, such as [Font Awesome](https://fontawesome.com). A common alternative is to replace your primary font with one of the [Patched Nerd Fonts](https://github.com/ryanoasis/nerd-fonts), which saves you from having to install multiple fonts.
@@ -115,6 +117,7 @@ let g:lightline#ale#indicator_infos = "\uf129"
 let g:lightline#ale#indicator_warnings = "\uf071"
 let g:lightline#ale#indicator_errors = "\uf05e"
 let g:lightline#ale#indicator_ok = "\uf00c"
+let g:lightline#ale#indicator_unavailable = "\uf05e"
 ```
 
 ## License
