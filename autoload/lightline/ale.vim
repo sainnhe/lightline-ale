@@ -13,7 +13,7 @@ function! lightline#ale#infos() abort
   if !lightline#ale#linted()
     return ''
   endif
-  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:counts = lightline#ale#count(bufnr(''))
   return l:counts.info == 0 ? '' : printf(s:indicator_infos . '%d', l:counts.info)
 endfunction
 
@@ -21,7 +21,7 @@ function! lightline#ale#warnings() abort
   if !lightline#ale#linted()
     return ''
   endif
-  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:counts = lightline#ale#count(bufnr(''))
   let l:all_warnings = l:counts.warning + l:counts.style_warning
   return l:all_warnings == 0 ? '' : printf(s:indicator_warnings . '%d', all_warnings)
 endfunction
@@ -30,7 +30,7 @@ function! lightline#ale#errors() abort
   if !lightline#ale#linted()
     return ''
   endif
-  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:counts = lightline#ale#count(bufnr(''))
   let l:all_errors = l:counts.error + l:counts.style_error
   return l:all_errors == 0 ? '' : printf(s:indicator_errors . '%d', all_errors)
 endfunction
@@ -39,7 +39,7 @@ function! lightline#ale#ok() abort
   if !lightline#ale#linted()
     return ''
   endif
-  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:counts = lightline#ale#count(bufnr(''))
   return l:counts.total == 0 ? s:indicator_ok : ''
 endfunction
 
@@ -63,4 +63,17 @@ function! lightline#ale#linted() abort
     \ && getbufvar(bufnr(''), 'ale_enabled', 1)
     \ && getbufvar(bufnr(''), 'ale_linted', 0) > 0
     \ && ale#engine#IsCheckingBuffer(bufnr('')) == 0
+endfunction
+
+function! lightline#ale#count(buffer) abort
+  " Force refresh the count info
+  " https://github.com/dense-analysis/ale/issues/4737
+  call ale#statusline#Update(
+        \ a:buffer,
+        \ g:ale_buffer_info[a:buffer].loclist
+        \ )
+  call ale#sign#SetSigns(
+        \ a:buffer,
+        \ g:ale_buffer_info[a:buffer].loclist)
+  return ale#statusline#Count(a:buffer)
 endfunction
